@@ -7,12 +7,12 @@
 #define MU_SR_READEOF 2
 #define MU_SR_WRITEFULL 3
 
-// this structure is used for socket operation. if socket operation 
-// doesn't occur error, status set value MU_SR_SUCCESS. otherwise,
+// This structure is used for socket operation. If socket operation 
+// doesn't occur error, status set value MU_SR_SUCCESS. Otherwise,
 // status set value MU_SR_ERROR, and errno will be appropriate,
-// and errstr assign for human-readable string. MU_SR_CONNECTING 
-// will be set to status when connect to server. MU_SR_READEOF 
-// will be set when read socket.
+// and errstr assign as human-readable string. MU_SR_CONNECTING 
+// will be set to status when connect to server use nonblocking. 
+// MU_SR_READEOF will be set when read socket return 0.
 struct MUSockRet {
 	int status;
 	int errno;
@@ -31,12 +31,10 @@ public:
 	static int read(int fd, void *data, int &len, MUSocketRet &sr);
 	// return write data length
 	static int write(int fd, void *data, int len, MUSocketRet &sr);
-	// set kernel socket option
-	static int setSocketOpt(int fd, int op, int value);
 	// set socket fd blocking or non-block, nonblock = 0 means block, otherwise nonblock
 	static int setNonblocking(int fd, int nonblock);
 	// set socket fd keep alive time
-	static int setKeepAlive(int fd);
+	static int setKeepAlive(int fd, int millisec);
 };
 
 #endif //__MUSOCKET_H__

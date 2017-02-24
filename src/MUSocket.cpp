@@ -33,7 +33,7 @@ int MUSocket::listen(const char *host, int port, MUSocketRet &sr) {
 		if (sockfd == -1) {
 			continue;
 		}
-		setNonblocking(sockfd);
+		setNonblocking(sockfd, 1);
 		setKeepAlive(sockfd);
 		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
 			close(sockfd);
@@ -185,10 +185,6 @@ int MUSocket::write(int fd, void *data, int len, MUSocketRet &sr){
 	return wcount;
 }
 
-int MUSocket::setSocketOpt(int fd, int op, int value) {
-
-}
-
 int MUSocket::setNonblocking(int fd, int nonblock) {
 	int flags = fcntl(fd, F_GETFL);
 	if (flags == -1) {
@@ -211,7 +207,29 @@ int MUSocket::setNonblocking(int fd, int nonblock) {
 	return 0;
 }
 
-int MUSocket::setKeepAlive(int fd) {
+int MUSocket::setKeepAlive(int fd, int millisec) {
+	int val = 1;
+    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &val, sizeof(val)) == -1)
+    {
+        return -1;
+    }
 
+#ifdef __linux__
+    val = millisec;
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &val, sizeof(val)) < 0) {
+        return -1;
+    }
+    val = millisec/3;
+    if (val == 0) 
+    	val = 1;
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &val, sizeof(val)) < 0) {
+        return -1;
+    }
+    val = 3;
+    if (setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &val, sizeof(val)) < 0) {
+        return -1;
+    }
+#endif
+    return 0;
 }
 
