@@ -7,13 +7,12 @@ public:
 	~MUServer();
 
 public:
-	// create server and initiate it
-	bool createServer();
-	// load kinds of configuration 
-	bool preloadService();
-	// load kinds of service, include lua, c, c++ and so on
-	bool loadService();
 
+	bool initServer();
+
+	bool startServer();
+
+	bool exitServer();
 };
 
 #endif //__MUSERVER_H__

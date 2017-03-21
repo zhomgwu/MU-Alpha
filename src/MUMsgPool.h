@@ -1,42 +1,61 @@
 #ifndef __MU_MSGPOOL_H__
 #define __MU_MSGPOOL_H__
 
-struct MUMessage {
+struct NetMessage {
 	void *data;
 	int length;
-	MUMessage *next;
+	NetMessage *next;
 };
 
-struct MUMsgList {
-	int fd;
-	MUMessage *head;
-	MUMessage *tail;
-};
+class NetMessageList {
+public:
+	NetMessageList();
+	~NetMessageList();
 
-struct MUGlobalMsgList {
-	MUMsgList *current;
-	MUGlobalMsgList *next;
-};
+public:
 
-class MUMsgPool {
+	void init(int fd);
+
+	bool isEmpty();
+
+	void pushFront(NetMessage *msg);
+
+	void pushBack(NetMessage *msg);
+
+	NetMessage *popHead();
+
 private:
-	MUMsgPool();
-	~MUMsgPool();
+	int _fd;
+	NetMessage *_head;
+	NetMessage *_tail;
+};
+
+struct PoolMessageList {
+	NetMessageList *netMsgList;
+	PoolMessageList *next;
+};
+
+class MessagePool {
+private:
+	MessagePool();
+	~MessagePool();
 
 public:
 	
-	static MUMsgPool *getInstance();
+	static MessagePool *getInstance();
 
 	static void destroy();
 
-	void pushMsg(MUMsgList *list);
+	bool isEmpty();
+	
+	void pushMessage(NetMessageList *list);
 
-	MUMsgList *popMsg();
+	NetMessageList *popMessage();
 
 private:
-	static MUMsgPool *_instance;
-	static MUGlobalMsgList *_head;
-	static MUGlobalMsgList *_tail;
+	static MessagePool *_instance;
+	PoolMessageList *_head;
+	PoolMessageList *_tail;
 };
 
 #endif //__MU_MSGPOOL_H__

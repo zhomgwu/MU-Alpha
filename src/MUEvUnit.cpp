@@ -1,11 +1,14 @@
 #include "MUEvUnit.h"
 
-MUEvUnitHash::MUEvUnitHash() {
-
+MUEvUnitHash::MUEvUnitHash()
+: _cap(0)
+, _count(0)
+, _capMask(0)
+, _units(NULL)
+, _unitHash(NULL) {
 }
 
 MUEvUnitHash::~MUEvUnitHash() {
-
 }
 
 void _clearEvUnit(MUEvUnit *eu) {
@@ -104,4 +107,3 @@ MUEvUnit* MUEvUnitHash::getUnit(int fd) {
 	}
 	return NULL;
 }
-
