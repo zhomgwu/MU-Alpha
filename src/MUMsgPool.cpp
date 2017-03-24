@@ -4,7 +4,6 @@ NetMessageList::NetMessageList() {
 }
 
 NetMessageList::~NetMessageList() {
-
 }
 
 void NetMessageList::init(int fd) {
@@ -52,27 +51,13 @@ NetMessage *NetMessageList::popHead() {
 	return tmp;
 }
 
-MessagePool::MessagePool() {
+MessagePool::MessagePool()
+:_head(NULL)
+,_tail(NULL) {
 
 }
 
 MessagePool::~MessagePool() {
-
-}
-
-MessagePool *MessagePool::_instance = NULL;
-MessagePool *MessagePool::getInstance() {
-	if (_instance == NULL) {
-		_instance = new MessagePool;
-	}
-	return _instance;
-}
-
-void MessagePool::destroy() {
-	if (_instance != NULL) {
-		delete _instance;
-		_instance = NULL;
-	}
 }
 
 bool MessagePool::isEmpty() {

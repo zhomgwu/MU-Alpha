@@ -4,8 +4,8 @@
 struct MUFireEvent;
 class MUIPoll {
 public:
-	MUIPoll();
-	virtual ~MUIPoll();
+	MUIPoll() {}
+	virtual ~MUIPoll() {}
 
 public:
 

@@ -1,3 +1,7 @@
+/*
+MessagePool save all message from network, WORKER will process
+the message. MessagePool may be exist single or equality WORKERs.
+*/
 #ifndef __MU_MSGPOOL_H__
 #define __MU_MSGPOOL_H__
 
@@ -41,10 +45,6 @@ private:
 	~MessagePool();
 
 public:
-	
-	static MessagePool *getInstance();
-
-	static void destroy();
 
 	bool isEmpty();
 	
@@ -53,7 +53,6 @@ public:
 	NetMessageList *popMessage();
 
 private:
-	static MessagePool *_instance;
 	PoolMessageList *_head;
 	PoolMessageList *_tail;
 };

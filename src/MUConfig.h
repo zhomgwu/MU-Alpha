@@ -1,3 +1,11 @@
+/*
+load configuration format like:
+key1=value1
+key2=value2
+...
+line as annotation if '#' is line start.
+*/
+
 #ifndef __MUCONFIG_H__
 #define __MUCONFIG_H__
 
@@ -8,25 +16,24 @@ public:
 
 public:
 
-	void loadConfig(const char *file);
+	bool loadConfig(const char *file);
 
-	int totalLine();
+	int totalLines();
 
 	bool nextLine();
 
-	char* getLineKey();
+	template<T>
+	bool getLineKey(T& key);
 
-	bool getLineBool();
-
-	int getLineInt();
-
-	float getLineFloat();
-
-	char *getLineString();
+	template<T>
+	bool getLineValue(T& value);
 
 private:
-
-	const char *_filePath;
+	
+	int _totalLines;
+	char _filePath[256];
+	char *_fileData;
+	int _dataLength;
 };
 
 #endif //__MUCONFIG_H__
