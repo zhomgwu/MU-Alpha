@@ -5,6 +5,8 @@ struct MUEvUnit {
 	int fd;
 	int mask;
 	int type;
+	NetMessageList *readBuffer;
+	NetMessageList *writeBuffer;
 	MUEvUnit *next;
 };
 
@@ -15,13 +17,13 @@ public:
 
 public:
 
-	bool initUnitHash(int max);
+	bool init(int max);
 
-	bool insertUnit(int fd, int mask, int type);
+	bool insert(int fd, int mask, int type);
 
-	void removeUnit(int fd);
+	void remove(int fd);
 
-	bool isfullUnitHash();
+	bool isfull();
 
 	MUEvUnit* getUnit(int fd);
 

@@ -60,7 +60,7 @@ void MUEv::releaseEv() {
 bool MUEv::addEv(int fd, int mask, int type) {
 	MUEvUnit * eu = _events->getUnit(fd);
 	if (eu == NULL) {
-		_events->insertUnit(fd, mask, type);
+		_events->insert(fd, mask, type);
 		_pollState->addPoll(fd, EV_OP_NONE, mask);
 	}
 	else
@@ -80,7 +80,7 @@ bool MUEv::delEv(int fd, int mask) {
 		_pollState->delPoll(fd, eu->mask);
 		eu->mask &= ~mask;
 		if (eu->mask == EV_OP_NONE) {
-			_events->removeUnit(fd);
+			_events->remove(fd);
 		}
 	}
 }
@@ -91,17 +91,63 @@ bool MUEv::processEv() {
 		MUFireEvent &fe = _fireEvents[i];
 		MUEvUnit *eu = _events->getUnit(fe.fd);
 		assert(eu != NULL);
+
+		MUSockRet ret;
+
 		if (eu->type == EV_SOCKET_LISTEN) {
 			// need accept
+			char hostbuf[INET6_ADDRSTRLEN] = {};	
+			int clientfd = MUSocket::accept(eu->fd, hostbuf, INET6_ADDRSTRLEN, ret);
+			if (ret.status == MU_SR_SUCCESS) {
+				// new client
+				addEv->addEv(clientfd, EV_OP_READABLE | EV_OP_WRITABLE, EV_SOCKET_ACCEPT));
+			}
+			else {
+				// error
 
+			}
 		}
 		else if (eu->type == EV_SOCKET_ACCEPT) {
 			// need read or write to client
+			if (eu->mask & EV_OP_READABLE != 0) {
+				int rlen = 0;
+				// read buffer cache greater than 1460
+				MUBuffer buffer;
+				rlen = MUSocket::read(eu->fd, buffer, ret);
+				if (ret.status == MU_SR_SUCCESS) {
+					// insert to bufferlist
 
+				}
+				else {
+					// error remove from _events
+
+				}
+			}
+			else if (eu->mask & EV_OP_WRITABLE != 0) {
+				// write
+				while (!eu->writeBuffer->isEmpty()) {
+					int wlen = 0;
+					NetMessage *sendData = eu->writeBuffer->popHead();
+					wlen = MUSocket::write(eu->fd, sendData->buffer, ret);
+					if (ret.status == MU_SR_SUCCESS) {
+						// send success
+					}
+					else if (ret.status == MU_SR_WRITEFULL) {
+						// shift write buffer
+
+						break;
+					}
+					else {
+						// remove from _events
+
+						break;
+					}
+				}
+			}
 		}
 		else if (eu->type == EV_SOCKET_CONNECT) {
 			// have response from other server
-
+			
 		}
 		else {
 			// exception happen

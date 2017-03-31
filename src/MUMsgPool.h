@@ -6,8 +6,7 @@ the message. MessagePool may be exist single or equality WORKERs.
 #define __MU_MSGPOOL_H__
 
 struct NetMessage {
-	void *data;
-	int length;
+	MUBuffer buffer;
 	NetMessage *next;
 };
 
@@ -40,7 +39,7 @@ struct PoolMessageList {
 };
 
 class MessagePool {
-private:
+public:
 	MessagePool();
 	~MessagePool();
 
@@ -53,6 +52,7 @@ public:
 	NetMessageList *popMessage();
 
 private:
+	int _listLength;
 	PoolMessageList *_head;
 	PoolMessageList *_tail;
 };

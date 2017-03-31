@@ -11,9 +11,7 @@ public:
 
 	virtual void registerService(int key, MUService *service);
 
-	virtual void parseMessage(void *data, int length);
-
-	virtual void dispatch();
+	virtual void dispatchMessage();
 
 protected:
 

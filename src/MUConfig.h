@@ -9,6 +9,8 @@ line as annotation if '#' is line start.
 #ifndef __MUCONFIG_H__
 #define __MUCONFIG_H__
 
+#include "MUBuffer.h"
+
 class MUConfig {
 public:
 	MUConfig();
@@ -32,8 +34,7 @@ private:
 	
 	int _totalLines;
 	char _filePath[256];
-	char *_fileData;
-	int _dataLength;
+	MUBuffer _buffer;
 };
 
 #endif //__MUCONFIG_H__

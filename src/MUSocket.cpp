@@ -34,7 +34,7 @@ int MUSocket::listen(const char *host, int port, MUSocketRet &sr) {
 			continue;
 		}
 		setNonblocking(sockfd, 1);
-		setKeepAlive(sockfd);
+		setKeepAlive(sockfd, 3000);
 		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
 			close(sockfd);
 			goto _error:

@@ -18,7 +18,7 @@ void _clearEvUnit(MUEvUnit *eu) {
 	eu->next = NULL;
 }
 
-bool MUEvUnitHash::initUnitHash(int max) {
+bool MUEvUnitHash::init(int max) {
 	_cap = 1024;
 	while (_cap < max) {
 		_cap = _cap << 1;
@@ -37,8 +37,8 @@ bool MUEvUnitHash::initUnitHash(int max) {
 	return true;
 }
 
-bool MUEvUnitHash::insertUnit(int fd, int mask, int type) {
-	if (isfullUnitHash()) {
+bool MUEvUnitHash::insert(int fd, int mask, int type) {
+	if (isfull()) {
 		return false;
 	}
 	// get element in storage
@@ -61,7 +61,7 @@ bool MUEvUnitHash::insertUnit(int fd, int mask, int type) {
 	return true;
 }
 
-void MUEvUnitHash::removeUnit(int fd) {
+void MUEvUnitHash::remove(int fd) {
 	MUEvUnit *euh = NULL;
 	int index = fd & _capMask;
 	euh = &_unitHash[index];
@@ -87,7 +87,7 @@ void MUEvUnitHash::removeUnit(int fd) {
 	}
 }
 
-bool MUEvUnitHash::isfullUnitHash() {
+bool MUEvUnitHash::isfull() {
 	return _cap == _count;
 }
 

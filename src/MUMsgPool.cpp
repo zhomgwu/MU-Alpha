@@ -75,6 +75,7 @@ void MessagePool::pushMessage(NetMessageList *list) {
 		_tail->next = list;
 		_tail = list;
 	}
+	_listLength++;
 }
 
 NetMessageList *MessagePool::popMessage() {
@@ -83,5 +84,6 @@ NetMessageList *MessagePool::popMessage() {
 	}
 	NetMessageList *tmp = _head;
 	_head = _head->next;
+	_listLength--;
 	return tmp;
 }

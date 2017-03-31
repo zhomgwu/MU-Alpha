@@ -13,21 +13,12 @@ bool MUWorker::init() {
 	return true;
 }
 
-bool MUWorker::isPause() {
-	return _isPause;
-}
-
-void MUWorker::dispatchMessage() {
+void MUWorker::runWorker() {
 	NetMessageList *headList = _msgPool->popMessage();
 	if (!headList) {
-		NetMessage * headList
-	}
+		NetMessage * message = headList->popHead();
 		
-}
 
-void MUWorker::runWorker() {
-	if (!_isPause) {
-		dispatchMessage();
 	}
 }
 

@@ -10,15 +10,10 @@ public:
 
 	bool init();
 
-	bool isPause();
-
-	void dispatchMessage();
-
 	void runWorker();
 
 private:
 
-	bool _isPause;
 	MessagePool *_msgPool;
 	MessageDispatcher *_msgDispatcher;
 };
