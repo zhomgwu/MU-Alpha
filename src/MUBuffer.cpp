@@ -5,6 +5,10 @@ MUBuffer::MUBuffer()
 }
 
 MUBuffer::~MUBuffer() {
+	if (_data != NULL) {
+		delete _data;
+		_data = NULL;
+	}
 }
 
 bool MUBuffer::resize(int size) {
@@ -37,14 +41,22 @@ void MUBuffer::write(void *data, int len) {
 }
 
 void *MUBuffer::buffer() {
-	return _data;
-}
-
-void *MUBuffer::shiftBuffer() {
-	return _data + _shift;
+	return (char*)_data + _shift;
 }
 
 int MUBuffer::length() {
+	return _length - shift;
+}
+
+void MUBuffer::shift(int sflen) {
+	_shift += sflen;
+}
+
+void *MUBuffer::originBuffer() {
+	return _data;
+}
+
+int MUBuffer::originLength() {
 	return _length;
 }
 
@@ -64,4 +76,19 @@ void MUBuffer::clearup() {
 		_length = 0;
 		_size = 0;
 	}
+}
+
+void MUBuffer::reset() {
+	if (_shift != 0) {	
+		_length = 0;
+		_shift = 0;
+		memset(_data, 0, _size);	
+	}
+}
+
+MUBuffer& MUBuffer::operator = (const MUBuffer& buffer) {
+	resize(buffer._size)
+	_length = buffer._length;
+	_shift = buffer._shift;
+	memcpy(_data, buffer._data, buffer._length);
 }

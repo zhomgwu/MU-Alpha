@@ -7,13 +7,20 @@
 #define EV_OP_READABLE 1
 #define EV_OP_WRITABLE 2
 
-#define EV_SOCKET_LISTEN 1		// listening fd
-#define EV_SOCKET_ACCEPT 2		// accept from client connect
-#define EV_SOCKET_CONNECT 3		// connect to other server
+enum _SOCKETTYPE {
+	EV_SOCKET_LISTEN = 0,	// listening fd	
+	EV_SOCKET_ACCEPT,		// accept from client connect
+	EV_SOCKET_CONNECT,		// connect to other server
+};	
 
 struct MUFireEvent {
 	int fd;
 	int mask;
+};
+
+struct MUDelEvent {
+	MUFireEvent fe;
+	MUDelEvent *next;
 };
 
 class MUEvUnitHash;
@@ -26,21 +33,24 @@ public:
 
 public:
 
-	bool createEv(int size = EV_MAX_SIZE);
+	bool init(int size = EV_MAX_SIZE);
 
-	void releaseEv();
+	void release();
 
-	bool addEv(int fd, int mask, int type);
+	bool add(int fd, int mask, int type);
 
-	bool delEv(int fd, int mask);
+	bool del(int fd, int mask);
 
-	bool processEv();
+	void process();
+
+	void pushDelEvent(int fd);
 
 private:
 
 	int _eventSize;
 	MUEvUnitHash *_events;
 	MUFireEvent *_fireEvents;
+	MUDelEvent *_delEvents;
 	MUIPoll *_pollState;
 };
 

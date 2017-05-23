@@ -1,22 +1,26 @@
 #include "MUMsgPool.h"
 
-NetMessageList::NetMessageList() {
+WorkerMessageList::WorkerMessageList() {
 }
 
-NetMessageList::~NetMessageList() {
+WorkerMessageList::~WorkerMessageList() {
 }
 
-void NetMessageList::init(int fd) {
-	_fd = fd;
+void WorkerMessageList::init(int sign) {
+	_sign = sign;
 	_head = NULL;
 	_tail = NULL;
 }
 
-bool NetMessageList::isEmpty() {
+int WorkerMessageList::getOwner() {
+	return _sign;
+}
+
+bool WorkerMessageList::isEmpty() {
 	return _head == NULL;
 }
 
-void NetMessageList::pushFront(NetMessage *msg) {
+void WorkerMessageList::pushFront(WorkerMessage *msg) {
 	if (msg == NULL) {
 		return;
 	}
@@ -29,7 +33,7 @@ void NetMessageList::pushFront(NetMessage *msg) {
 	}
 }
 
-void NetMessageList::pushBack(NetMessage *msg) {
+void WorkerMessageList::pushBack(WorkerMessage *msg) {
 	if (msg == NULL) {
 		return;
 	}
@@ -42,11 +46,11 @@ void NetMessageList::pushBack(NetMessage *msg) {
 	}
 }
 
-NetMessage *NetMessageList::popHead() {
+WorkerMessage *WorkerMessageList::popHead() {
 	if (isEmpty()) {
 		return NULL;
 	}
-	NetMessage *tmp = _head;
+	WorkerMessage *tmp = _head;
 	_head = _head->next;
 	return tmp;
 }
@@ -64,7 +68,7 @@ bool MessagePool::isEmpty() {
 	return _head == NULL;
 }
 
-void MessagePool::pushMessage(NetMessageList *list) {
+void MessagePool::pushMessage(WorkerMessageList *list) {
 	if (list == NULL) {
 		return;
 	}
@@ -78,11 +82,11 @@ void MessagePool::pushMessage(NetMessageList *list) {
 	_listLength++;
 }
 
-NetMessageList *MessagePool::popMessage() {
+WorkerMessageList *MessagePool::popMessage() {
 	if (isEmpty()) {
 		return NULL;
 	}
-	NetMessageList *tmp = _head;
+	WorkerMessageList *tmp = _head;
 	_head = _head->next;
 	_listLength--;
 	return tmp;

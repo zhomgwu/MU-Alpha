@@ -1,5 +1,7 @@
-#ifndef __MU_WORKER_H__
-#define __MU_WORKER_H__
+#ifndef __MUWORKER_H__
+#define __MUWORKER_H__
+
+#include <vector>
 
 class MUWorker {
 public:
@@ -12,11 +14,32 @@ public:
 
 	void runWorker();
 
-private:
+	void pushMessage(WorkerMessageList *msgList);
 
+private:
+	MUMsgDispatcher *_dispatcher;
 	MessagePool *_msgPool;
-	MessageDispatcher *_msgDispatcher;
 };
 
-#endif //__MU_WORKER_H__
+class MUWorkerManager {
+public:
+	MUWorkerManager()
+	~MUWorkerManager();
+public:
+	
+	static MUWorkerManager* getInstance();
+	
+	static void destroy();
+
+	void newWorker();
+
+	MUWorker *getWorker();
+
+private: 
+
+	static MUWorkerManager *_instance;
+	std::vector<MUWorker* > _workers;
+};
+
+#endif //__MUWORKER_H__
 

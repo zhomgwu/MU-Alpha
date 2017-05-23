@@ -5,8 +5,6 @@ struct MUEvUnit {
 	int fd;
 	int mask;
 	int type;
-	NetMessageList *readBuffer;
-	NetMessageList *writeBuffer;
 	MUEvUnit *next;
 };
 

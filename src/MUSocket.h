@@ -8,7 +8,7 @@
 #define MU_SR_WRITEFULL 3
 
 // This structure is used for socket operation. If socket operation 
-// doesn't occur error, status set value MU_SR_SUCCESS. Otherwise,
+// doesn't occur error will return status MU_SR_SUCCESS. Otherwise 
 // status set value MU_SR_ERROR, and errno will be appropriate,
 // and errstr assign as human-readable string. MU_SR_CONNECTING 
 // will be set to status when connect to server use nonblocking. 

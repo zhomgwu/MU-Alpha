@@ -1,9 +1,9 @@
 /*
-Use for assign memory
+Use for assign memory of binary data
 */
 
-#ifndef __MU_BUFFER_H__
-#define __MU_BUFFER_H__
+#ifndef __MUBUFFER_H__
+#define __MUBUFFER_H__
 
 class MUBuffer {
 public:
@@ -16,14 +16,24 @@ public:
 
 	void write(void *data, int len);
 
+	void shift(int sflen);
+
 	void *buffer();
 
 	int length();
+
+	void *originBuffer();
+
+	int originLength();
 
 	template<T>
 	bool read(T &data);
 
 	void clearup();
+
+	void reset();
+
+	MUBuffer & operator = (const MUBuffer& buffer);
 
 private:
 	int _size;
@@ -32,4 +42,4 @@ private:
 	void *_data;
 };
 
-#endif //__MU_BUFFER_H__
+#endif //__MUBUFFER_H__

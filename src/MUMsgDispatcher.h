@@ -1,5 +1,5 @@
-#ifndef __MU_MSGDISPATCHER_H__
-#define __MU_MSGDISPATCHER_H__
+#ifndef __MUMSGDISPATCHER_H__
+#define __MUMSGDISPATCHER_H__
 
 
 class MUMessageDispatcher {
@@ -9,13 +9,15 @@ public:
 
 public:
 
-	virtual void registerService(int key, MUService *service);
+	virtual MUBuffer *getPackage(WorkerMessageList *msgList);
 
-	virtual void dispatchMessage();
+	virtual void dispatchMessage(int owner, MUBuffer *buffer);
+
+	//virtual void registerService(int key, MUService *service);
 
 protected:
 
 	MUService *_services;
 };
 
-#endif //__MU_MSGDISPATCHER_H__
+#endif //__MUMSGDISPATCHER_H__

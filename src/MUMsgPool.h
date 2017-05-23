@@ -2,39 +2,41 @@
 MessagePool save all message from network, WORKER will process
 the message. MessagePool may be exist single or equality WORKERs.
 */
-#ifndef __MU_MSGPOOL_H__
-#define __MU_MSGPOOL_H__
+#ifndef __MUMSGPOOL_H__
+#define __MUMSGPOOL_H__
 
-struct NetMessage {
+struct WorkerMessage {
 	MUBuffer buffer;
-	NetMessage *next;
+	WorkerMessage *next;
 };
 
-class NetMessageList {
+class WorkerMessageList {
 public:
-	NetMessageList();
-	~NetMessageList();
+	WorkerMessageList();
+	~WorkerMessageList();
 
 public:
 
-	void init(int fd);
+	void init(int sign);
+
+	int getOwner();
 
 	bool isEmpty();
 
-	void pushFront(NetMessage *msg);
+	void pushFront(WorkerMessage *msg);
 
-	void pushBack(NetMessage *msg);
+	void pushBack(WorkerMessage *msg);
 
-	NetMessage *popHead();
+	WorkerMessage *popHead();
 
 private:
-	int _fd;
-	NetMessage *_head;
-	NetMessage *_tail;
+	int _sign;
+	WorkerMessage *_head;
+	WorkerMessage *_tail;
 };
 
 struct PoolMessageList {
-	NetMessageList *netMsgList;
+	WorkerMessageList *netMsgList;
 	PoolMessageList *next;
 };
 
@@ -47,9 +49,9 @@ public:
 
 	bool isEmpty();
 	
-	void pushMessage(NetMessageList *list);
+	void pushMessage(WorkerMessageList *list);
 
-	NetMessageList *popMessage();
+	WorkerMessageList *popMessage();
 
 private:
 	int _listLength;
@@ -57,4 +59,4 @@ private:
 	PoolMessageList *_tail;
 };
 
-#endif //__MU_MSGPOOL_H__
+#endif //__MUMSGPOOL_H__
